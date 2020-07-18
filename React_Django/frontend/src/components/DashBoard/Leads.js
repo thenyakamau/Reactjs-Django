@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getLeads, deleteLead } from "../../Redux/actions/Leads";
+import CustomSnackBar from "../widgets/CustomSnackBar";
 
 class Leads extends Component {
   static propTypes = {
@@ -10,12 +11,44 @@ class Leads extends Component {
     deleteLead: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      openSnackBar: false,
+      snackPostion: { vertical: "bottom", horizontal: "center" },
+    };
+    this.closeSnackBar = this.closeSnackBar.bind(this);
+  }
+
   componentDidMount() {
     this.props.getLeads();
   }
 
+  componentDidUpdate(prevProps) {
+    const { error } = this.props;
+    if (error !== prevProps.error) {
+      this.setState({ openSnackBar: true });
+    }
+  }
+
+  closeSnackBar() {
+    this.setState({ openSnackBar: false });
+  }
+
   render() {
-    const { leads, deleteLead } = this.props;
+    const { leads, deleteLead, error } = this.props;
+    const { openSnackBar, snackPostion } = this.state;
+    const isError = error.isError;
+    let value = Object.keys(error.responseMessage)[0];
+    const responseMessage = error.responseMessage[value];
+    console.log(responseMessage);
+    const snackValues = {
+      isError,
+      responseMessage,
+      openSnackBar,
+      snackPostion,
+    };
+
     return (
       <div>
         <center>
@@ -53,6 +86,10 @@ class Leads extends Component {
             })}
           </tbody>
         </table>
+        <CustomSnackBar
+          values={snackValues}
+          closeSnackBar={this.closeSnackBar}
+        />
       </div>
     );
   }
@@ -60,6 +97,7 @@ class Leads extends Component {
 
 const mapStateToProps = (state) => ({
   leads: state.leadsReducer.leads,
+  error: state.errorsReducer,
 });
 
 export default connect(mapStateToProps, { getLeads, deleteLead })(Leads);
