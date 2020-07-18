@@ -9,17 +9,18 @@ function TransitionLeft(props) {
 
 export default function CustomSnackBar(props) {
   const { values, closeSnackBar } = props;
+
   return (
     <Snackbar
       open={values.openSnackBar}
-      anchorOrigin={values.snackPostion}
+      anchorOrigin={values.snackPosition}
       onClose={closeSnackBar}
       autoHideDuration={6000}
       TransitionComponent={TransitionLeft}
     >
       {values.isError === true ? (
         <Alert onClose={closeSnackBar} severity="error">
-          {values.responseMessage[0]}
+          {values.responseMessage}
         </Alert>
       ) : (
         <Alert onClose={closeSnackBar} severity="success">

@@ -15,9 +15,12 @@ class Leads extends Component {
     super(props);
     this.state = {
       openSnackBar: false,
-      snackPostion: { vertical: "bottom", horizontal: "center" },
+      snackPosition: { vertical: "top", horizontal: "center" },
+      responseMessage: "",
+      isError: "",
     };
     this.closeSnackBar = this.closeSnackBar.bind(this);
+    this.setResponse = this.setResponse.bind(this);
   }
 
   componentDidMount() {
@@ -25,10 +28,19 @@ class Leads extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { error } = this.props;
-    if (error !== prevProps.error) {
-      this.setState({ openSnackBar: true });
-    }
+    const { error, message } = this.props;
+    if (error !== prevProps.error) this.setResponse(error);
+    else if (message !== prevProps.message) this.setResponse(message);
+  }
+
+  setResponse(response) {
+    this.setState({ openSnackBar: true });
+    let value = Object.keys(response.responseMessage)[0];
+    this.setState({ isError: response.isError });
+    const responseMessage = response.responseMessage[value];
+    if (responseMessage instanceof Array)
+      this.setState({ responseMessage: responseMessage[0] });
+    else this.setState({ responseMessage: responseMessage });
   }
 
   closeSnackBar() {
@@ -36,17 +48,19 @@ class Leads extends Component {
   }
 
   render() {
-    const { leads, deleteLead, error } = this.props;
-    const { openSnackBar, snackPostion } = this.state;
-    const isError = error.isError;
-    let value = Object.keys(error.responseMessage)[0];
-    const responseMessage = error.responseMessage[value];
-    console.log(responseMessage);
+    const { leads, deleteLead } = this.props;
+    const {
+      openSnackBar,
+      snackPosition,
+      responseMessage,
+      isError,
+    } = this.state;
+
     const snackValues = {
       isError,
       responseMessage,
       openSnackBar,
-      snackPostion,
+      snackPosition,
     };
 
     return (
@@ -66,7 +80,7 @@ class Leads extends Component {
             </tr>
           </thead>
           <tbody>
-            {leads.map((lead, index) => {
+            {leads.map((lead) => {
               return (
                 <tr key={lead.id}>
                   <td>{lead.id}</td>
@@ -98,6 +112,7 @@ class Leads extends Component {
 const mapStateToProps = (state) => ({
   leads: state.leadsReducer.leads,
   error: state.errorsReducer,
+  message: state.messagesReducer,
 });
 
 export default connect(mapStateToProps, { getLeads, deleteLead })(Leads);

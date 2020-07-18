@@ -24,6 +24,7 @@ class Form extends Component {
     e.preventDefault();
     const lead = { name, email, message };
     this.props.addLead(lead);
+    this.setState({ name: "", email: "", message: "" });
   }
 
   onChange(e) {

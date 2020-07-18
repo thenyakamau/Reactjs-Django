@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { GET_LEADS, DELETE_LEAD, ADD_LEAD, GET_ERRORS } from "./types";
+import { createSuccessMessage } from "./Messages";
 
 //Get Leads
 export const getLeads = () => (dispatch) => {
@@ -33,6 +34,7 @@ export const addLead = (lead) => (dispatch) => {
   };
   Axios.post(`/api/leads/`, lead, config)
     .then((res) => {
+      dispatch(createSuccessMessage({ message: "Lead Created" }));
       dispatch({
         type: ADD_LEAD,
         payload: res.data,
@@ -54,12 +56,20 @@ export const addLead = (lead) => (dispatch) => {
 export const deleteLead = (id) => (dispatch) => {
   Axios.delete(`/api/leads/${id}/`)
     .then((res) => {
+      dispatch(createSuccessMessage({ message: "Deleted Lead" }));
       dispatch({
         type: DELETE_LEAD,
         payload: id,
       });
     })
     .catch((error) => {
-      console.log(error);
+      const errors = {
+        responseMessage: error.response.data,
+        status: error.response.status,
+      };
+      dispatch({
+        type: GET_ERRORS,
+        payload: errors,
+      });
     });
 };
