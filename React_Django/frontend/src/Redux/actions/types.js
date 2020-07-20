@@ -7,3 +7,4 @@ export const USER_LOADING = "USER_LOADING";
 export const USER_LOADED = "USER_LOADED";
 export const AUTH_ERRORS = "AUTH_ERRORS";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOG_OUT = "LOG_OUT";

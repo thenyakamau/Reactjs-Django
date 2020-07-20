@@ -34,13 +34,20 @@ class Leads extends Component {
   }
 
   setResponse(response) {
-    this.setState({ openSnackBar: true });
     let value = Object.keys(response.responseMessage)[0];
-    this.setState({ isError: response.isError });
     const responseMessage = response.responseMessage[value];
     if (responseMessage instanceof Array)
-      this.setState({ responseMessage: responseMessage[0] });
-    else this.setState({ responseMessage: responseMessage });
+      this.setState({
+        responseMessage: responseMessage[0],
+        isError: response.isError,
+        openSnackBar: true,
+      });
+    else
+      this.setState({
+        responseMessage: responseMessage,
+        isError: response.isError,
+        openSnackBar: true,
+      });
   }
 
   closeSnackBar() {

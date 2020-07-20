@@ -1,10 +1,12 @@
 import Axios from "axios";
-import { GET_LEADS, DELETE_LEAD, ADD_LEAD, GET_ERRORS } from "./types";
+import { GET_LEADS, DELETE_LEAD, ADD_LEAD } from "./types";
 import { createSuccessMessage, createErrorMessage } from "./Messages";
+import TokenConfig from "../../components/utils/TokenConfig";
 
 //Get Leads
-export const getLeads = () => (dispatch) => {
-  Axios.get("/api/leads/")
+export const getLeads = () => (dispatch, getState) => {
+  let config = TokenConfig(getState);
+  Axios.get("/api/leads/", config)
     .then((res) => {
       dispatch({
         type: GET_LEADS,
@@ -21,13 +23,8 @@ export const getLeads = () => (dispatch) => {
 };
 
 //Add Lead
-export const addLead = (lead) => (dispatch) => {
-  let config = {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  };
+export const addLead = (lead) => (dispatch, getState) => {
+  let config = TokenConfig(getState);
   Axios.post(`/api/leads/`, lead, config)
     .then((res) => {
       dispatch(createSuccessMessage({ message: "Lead Created" }));
@@ -46,8 +43,9 @@ export const addLead = (lead) => (dispatch) => {
 };
 
 //Delete Lead
-export const deleteLead = (id) => (dispatch) => {
-  Axios.delete(`/api/leads/${id}/`)
+export const deleteLead = (id) => (dispatch, getState) => {
+  let config = TokenConfig(getState);
+  Axios.delete(`/api/leads/${id}/`, config)
     .then((res) => {
       dispatch(createSuccessMessage({ message: "Deleted Lead" }));
       dispatch({

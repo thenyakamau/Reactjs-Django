@@ -3,6 +3,7 @@ import {
   AUTH_ERRORS,
   USER_LOADED,
   LOGIN_SUCCESS,
+  LOG_OUT,
 } from "../actions/types";
 
 const initialState = {
