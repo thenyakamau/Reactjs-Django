@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { GET_LEADS, DELETE_LEAD, ADD_LEAD, GET_ERRORS } from "./types";
-import { createSuccessMessage } from "./Messages";
+import { createSuccessMessage, createErrorMessage } from "./Messages";
 
 //Get Leads
 export const getLeads = () => (dispatch) => {
@@ -16,11 +16,7 @@ export const getLeads = () => (dispatch) => {
         responseMessage: error.response.data,
         status: error.response.status,
       };
-
-      dispatch({
-        type: GET_ERRORS,
-        payload: errors,
-      });
+      dispatch(createErrorMessage(errors));
     });
 };
 
@@ -45,10 +41,7 @@ export const addLead = (lead) => (dispatch) => {
         responseMessage: error.response.data,
         status: error.response.status,
       };
-      dispatch({
-        type: GET_ERRORS,
-        payload: errors,
-      });
+      dispatch(createErrorMessage(errors));
     });
 };
 
@@ -67,9 +60,6 @@ export const deleteLead = (id) => (dispatch) => {
         responseMessage: error.response.data,
         status: error.response.status,
       };
-      dispatch({
-        type: GET_ERRORS,
-        payload: errors,
-      });
+      dispatch(createErrorMessage(errors));
     });
 };

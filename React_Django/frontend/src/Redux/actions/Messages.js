@@ -1,4 +1,4 @@
-import { GET_MESSAGES } from "./types";
+import { GET_MESSAGES, GET_ERRORS } from "./types";
 
 //Create Messages
 export const createSuccessMessage = (responseMessage) => (dispatch) => {
@@ -9,5 +9,12 @@ export const createSuccessMessage = (responseMessage) => (dispatch) => {
       isError: false,
       status: null,
     },
+  });
+};
+
+export const createErrorMessage = (errors) => (dispatch) => {
+  dispatch({
+    type: GET_ERRORS,
+    payload: errors,
   });
 };

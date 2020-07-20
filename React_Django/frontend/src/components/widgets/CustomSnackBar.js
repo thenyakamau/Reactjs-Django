@@ -15,7 +15,7 @@ export default function CustomSnackBar(props) {
       open={values.openSnackBar}
       anchorOrigin={values.snackPosition}
       onClose={closeSnackBar}
-      autoHideDuration={6000}
+      autoHideDuration={4000}
       TransitionComponent={TransitionLeft}
     >
       {values.isError === true ? (
